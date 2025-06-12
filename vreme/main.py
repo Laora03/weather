@@ -57,3 +57,5 @@ for city in picked:
         d = ud['weather'][0]['description']
         
         print("Weather in "+ uc+":" +d + ","+str(t)+"°C," +str(h)+"%humidity")
+        
+        
