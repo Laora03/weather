@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Global Weather </h2>
+
+    <form method="POST">
+        <div class="input-group mb-3">
+            <input type="text" name="city" placeholder="Enter city" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Check Weather</button>
+        </div>
+    </form>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if weather %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">{{ weather.city }}</h4>
+                <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="icon">
+                <p class="card-text">{{ weather.description }}</p>
+                <p class="card-text">Temperature: {{ weather.temp }} °C</p>
+                <p class="card-text">Humidity: {{ weather.humidity }}%</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if coldest and average_temp %}
+        <div class="alert alert-info">
+            <strong>Coldest City:</strong> {{ coldest.city }} ({{ coldest.temp }} °C) <br>
+            <strong>Average Temperature:</strong> {{ average_temp }} °C
+        </div>
+    {% endif %}
+
+    <h3 class="mt-5">Weather in 5 Random Cities</h3>
+    <a href="/refresh" class="btn btn-warning mb-4">Refresh Random Cities</a>
+
+    <div class="row">
+        {% for city in random_weather %}
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ city.city }}</h5>
+                    <img src="https://openweathermap.org/img/wn/{{ city.icon }}@2x.png" alt="icon">
+                    <p class="card-text">{{ city.description }}</p>
+                    <p class="card-text">Temperature: {{ city.temp }} °C</p>
+                    <p class="card-text">Humidity: {{ city.humidity }}%</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
