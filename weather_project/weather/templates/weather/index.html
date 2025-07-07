@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🌦 Weather App (Django)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f3;
+            text-align: center;
+            padding: 40px;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .card {
+            background: white;
+            display: inline-block;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 250px;
+        }
+        .cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 Global Weather </h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city">
+        <input type="submit" value="Check Weather">
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if weather %}
+        <div class="card">
+            <h2>{{ weather.city }}</h2>
+            <p>{{ weather.description }}</p>
+            <p><strong>{{ weather.temp }}°C</strong></p>
+            <p>{{ weather.humidity }}% humidity</p>
+            <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="icon">
+        </div>
+    {% endif %}
+    {% if recent_records %}
+  <h3>Last 10 records for {{ weather.city }}</h3>
+  <ul>
+    {% for record in recent_records %}
+      <li>
+        {{ record.timestamp|date:"d.m.Y H:i" }} —
+        {{ record.temperature }}°C,
+        {{ record.humidity }}% humidity,
+        {{ record.description }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+    {% if random_weather %}
+        <h2>Weather in 5 Random Cities</h2>
+        <div class="cards">
+            {% for city in random_weather %}
+                <div class="card">
+                    <h3>{{ city.city }}</h3>
+                    <p>{{ city.description }}</p>
+                    <p><strong>{{ city.temp }}°C</strong></p>
+                    <p>{{ city.humidity }}% humidity</p>
+                    <img src="http://openweathermap.org/img/wn/{{ city.icon }}@2x.png" alt="icon">
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if coldest %}
+        <h3>❄ Coldest city: {{ coldest.city }} ({{ coldest.temp }}°C)</h3>
+    {% endif %}
+
+    {% if average_temp %}
+        <h3>🌡 Average temp: {{ average_temp }}°C</h3>
+    {% endif %}
+</body>
+</html>
